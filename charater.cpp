@@ -13,7 +13,10 @@ typedef struct character
     ALLEGRO_SAMPLE_INSTANCE *atk_Sound;
     int anime; // counting the time of animation
     int anime_time; // indicate how long the animation
+    double timer; //counts time since deploy
+
 }Character;
+ALLEGRO_TIMER *timer;
 Character chara;
 ALLEGRO_SAMPLE *sample = NULL;
 void character_init(){
@@ -37,9 +40,14 @@ void character_init(){
     // initial the geometric information of character
     chara.width = al_get_bitmap_width(chara.img_move[0]);
     chara.height = al_get_bitmap_height(chara.img_move[0]);
-    chara.x = WIDTH/2;
-    chara.y = HEIGHT/2;
+    chara.x = 0;
+    chara.y = 0;
     chara.dir = false;
+
+    // initialize gravity
+
+    timer=al_create_timer(0.5);
+    al_start_timer(timer);
 
     // initial the animation component
     chara.state = STOP;
@@ -71,10 +79,12 @@ void charater_update(){
         chara.dir = false;
         chara.x -= 5;
         chara.state = MOVE;
-    }else if( key_state[ALLEGRO_KEY_S] ){
+    }
+    /*else if( key_state[ALLEGRO_KEY_S] ){
         chara.y += 5;
         chara.state = MOVE;
-    }else if( key_state[ALLEGRO_KEY_D] ){
+    }*/
+    else if( key_state[ALLEGRO_KEY_D] ){
         chara.dir = true;
         chara.x += 5;
         chara.state = MOVE;
@@ -86,6 +96,9 @@ void charater_update(){
     }else if ( chara.anime == 0 ){
         chara.state = STOP;
     }
+    //y position updates according to y=0.5*a*t^2
+    chara.y=1/2*(al_get_timer_count(timer)/2)*(al_get_timer_count(timer)/2)*0.5;
+    chara.state=MOVE;
 }
 void character_draw(){
     // with the state, draw corresponding image

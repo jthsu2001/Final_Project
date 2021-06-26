@@ -3,7 +3,7 @@
 bool draw = false;
 int window = 1;
 
-const char *title = "Final Project 10xxxxxxx";
+const char *title = "Final Project 109031128";
 
 // ALLEGRO Variables
 ALLEGRO_DISPLAY* display = NULL;
