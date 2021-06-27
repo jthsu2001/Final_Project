@@ -1,7 +1,7 @@
 #include "global.h"
 
 // variables for global usage
-const float FPS = 60.0;
+const float FPS = 120.0;
 const int WIDTH = 2160;
 const int HEIGHT = 1200;
 ALLEGRO_EVENT_QUEUE *event_queue = NULL;

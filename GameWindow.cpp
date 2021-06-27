@@ -54,8 +54,8 @@ void game_init() {
     fps  = al_create_timer( 1.0 / FPS );
     al_register_event_source(event_queue, al_get_timer_event_source( fps )) ;
     // initialize the icon on the display
-    ALLEGRO_BITMAP *icon = al_load_bitmap("./image/icon.jpg");
-    al_set_display_icon(display, icon);
+    ALLEGRO_BITMAP *logo = al_load_bitmap("./image/rocket.png");
+    al_set_display_icon(display, logo);
 }
 
 void game_begin() {
@@ -87,7 +87,7 @@ void game_update(){
         }
     }
     if( window == 2 ){
-        charater_update();
+        character_update();
     }
 }
 int process_event(){
@@ -107,7 +107,7 @@ int process_event(){
     else if(event.type == ALLEGRO_EVENT_TIMER)
         if(event.timer.source == fps)
             draw = true;
-    game_update();
+    if(draw) game_update();
     return 0;
 }
 void game_draw(){

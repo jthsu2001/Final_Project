@@ -1,6 +1,7 @@
 #ifndef GLOBAL_H_INCLUDED
 #define GLOBAL_H_INCLUDED
 #define GAME_TERMINATE -1
+#define ALLEGRO_STATICLINK 1
 #include <stdio.h>
 #include <allegro5/allegro.h>
 #include <allegro5/allegro_primitives.h>

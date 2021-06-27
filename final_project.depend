@@ -1,11 +1,12 @@
 # depslib dependency file v1.0
-1624696051 source:c:\users\jui-teng hsu\desktop\i2p1_final_project\charater.cpp
+1624794859 source:c:\users\jui-teng hsu\desktop\i2p1_final_project\charater.cpp
 	"charater.h"
 
-1624696051 c:\users\jui-teng hsu\desktop\i2p1_final_project\charater.h
+1624794859 c:\users\jui-teng hsu\desktop\i2p1_final_project\charater.h
 	"global.h"
+	<math.h>
 
-1624696051 c:\users\jui-teng hsu\desktop\i2p1_final_project\global.h
+1624716312 c:\users\jui-teng hsu\desktop\i2p1_final_project\global.h
 	<stdio.h>
 	<allegro5/allegro.h>
 	<allegro5/allegro_primitives.h>
@@ -316,7 +317,7 @@
 	"allegro5/allegro.h"
 	"allegro5/allegro_font.h"
 
-1624698207 source:c:\users\jui-teng hsu\desktop\i2p1_final_project\gamewindow.cpp
+1624784603 source:c:\users\jui-teng hsu\desktop\i2p1_final_project\gamewindow.cpp
 	"GameWindow.h"
 
 1624696051 c:\users\jui-teng hsu\desktop\i2p1_final_project\gamewindow.h
@@ -324,16 +325,16 @@
 	"charater.h"
 	"scene.h"
 
-1624696051 c:\users\jui-teng hsu\desktop\i2p1_final_project\scene.h
+1624787775 c:\users\jui-teng hsu\desktop\i2p1_final_project\scene.h
 	"global.h"
 	"charater.h"
 
-1624699576 source:c:\users\jui-teng hsu\desktop\i2p1_final_project\global.cpp
+1624778548 source:c:\users\jui-teng hsu\desktop\i2p1_final_project\global.cpp
 	"global.h"
 
 1624696051 source:c:\users\jui-teng hsu\desktop\i2p1_final_project\main.cpp
 	"GameWindow.h"
 
-1624699568 source:c:\users\jui-teng hsu\desktop\i2p1_final_project\scene.cpp
+1624787775 source:c:\users\jui-teng hsu\desktop\i2p1_final_project\scene.cpp
 	"scene.h"
 

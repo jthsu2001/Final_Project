@@ -2,52 +2,40 @@
 
 // the state of character
 enum {STOP = 0, MOVE, ATK};
+float gravity = 0.1;
 typedef struct character
 {
-    int x, y; // the position of image
+    float x, y; // the position of image
+    float angle;
     int width, height; // the width and height of image
+    float h_velocity, v_velocity; //velocity of horizontal and vertical direction
+    int score; //counts score
     bool dir; // left: false, right: true
     int state; // the state of character
-    ALLEGRO_BITMAP *img_move[2];
-    ALLEGRO_BITMAP *img_atk[2];
-    ALLEGRO_SAMPLE_INSTANCE *atk_Sound;
+    ALLEGRO_BITMAP *img;
     int anime; // counting the time of animation
     int anime_time; // indicate how long the animation
-    double timer; //counts time since deploy
+
 
 }Character;
 ALLEGRO_TIMER *timer;
 Character chara;
 ALLEGRO_SAMPLE *sample = NULL;
+ALLEGRO_FONT *stats = NULL;
 void character_init(){
     // load character images
-    for(int i = 1 ; i <= 2 ; i++){
-        char temp[50];
-        sprintf( temp, "./image/char_move%d.png", i );
-        chara.img_move[i-1] = al_load_bitmap(temp);
-    }
-    for(int i = 1 ; i <= 2 ; i++){
-        char temp[50];
-        sprintf( temp, "./image/char_atk%d.png", i );
-        chara.img_atk[i-1] = al_load_bitmap(temp);
-    }
-    // load effective sound
-    sample = al_load_sample("./sound/atk_sound.wav");
-    chara.atk_Sound  = al_create_sample_instance(sample);
-    al_set_sample_instance_playmode(chara.atk_Sound, ALLEGRO_PLAYMODE_ONCE);
-    al_attach_sample_instance_to_mixer(chara.atk_Sound, al_get_default_mixer());
-
+    char temp[50];
+    sprintf( temp, "./image/rocket.png");
+    chara.img = al_load_bitmap(temp);
     // initial the geometric information of character
-    chara.width = al_get_bitmap_width(chara.img_move[0]);
-    chara.height = al_get_bitmap_height(chara.img_move[0]);
-    chara.x = 0;
-    chara.y = 0;
+    chara.width = al_get_bitmap_width(chara.img);
+    chara.height = al_get_bitmap_height(chara.img);
+    chara.x = chara.width/2;
+    chara.y = chara.height/2;
+    chara.h_velocity=10;
+    chara.angle=0;
     chara.dir = false;
 
-    // initialize gravity
-
-    timer=al_create_timer(0.5);
-    al_start_timer(timer);
 
     // initial the animation component
     chara.state = STOP;
@@ -70,79 +58,56 @@ void charater_process(ALLEGRO_EVENT event){
         key_state[event.keyboard.keycode] = false;
     }
 }
-void charater_update(){
+void character_update(){
     // use the idea of finite state machine to deal with different state
     if( key_state[ALLEGRO_KEY_W] ){
-        chara.y -= 5;
-        chara.state = MOVE;
+        chara.v_velocity-=0.3*cosf(chara.angle);
+        chara.h_velocity+=0.3*sinf(chara.angle);
     }else if( key_state[ALLEGRO_KEY_A] ){
-        chara.dir = false;
-        chara.x -= 5;
-        chara.state = MOVE;
+        chara.angle-=0.1/3.14159;
     }
-    /*else if( key_state[ALLEGRO_KEY_S] ){
-        chara.y += 5;
-        chara.state = MOVE;
-    }*/
     else if( key_state[ALLEGRO_KEY_D] ){
-        chara.dir = true;
-        chara.x += 5;
-        chara.state = MOVE;
-    }else if( key_state[ALLEGRO_KEY_SPACE] ){
-        chara.state = ATK;
-    }else if( chara.anime == chara.anime_time-1 ){
+        chara.angle+=0.1/3.14159;
+    }
+    /*else if( chara.anime == chara.anime_time-1 ){
         chara.anime = 0;
         chara.state = STOP;
-    }else if ( chara.anime == 0 ){
+    }*/
+    else if ( chara.anime == 0 ){
         chara.state = STOP;
     }
     //y position updates according to y=0.5*a*t^2
-    chara.y=1/2*(al_get_timer_count(timer)/2)*(al_get_timer_count(timer)/2)*0.5;
-    chara.state=MOVE;
+    chara.v_velocity+=(float)gravity;
+    chara.y += chara.v_velocity*(1/FPS)*2;
+    chara.x += chara.h_velocity*(1/FPS)*2;
+    printf("%f\n", sinf(chara.angle));
+    character_draw();
 }
 void character_draw(){
     // with the state, draw corresponding image
-    if( chara.state == STOP ){
-        if( chara.dir )
-            al_draw_bitmap(chara.img_move[0], chara.x, chara.y, ALLEGRO_FLIP_HORIZONTAL);
-        else
-            al_draw_bitmap(chara.img_move[0], chara.x, chara.y, 0);
-    }else if( chara.state == MOVE ){
-        if( chara.dir ){
-            if( chara.anime < chara.anime_time/2 ){
-                al_draw_bitmap(chara.img_move[0], chara.x, chara.y, ALLEGRO_FLIP_HORIZONTAL);
-            }else{
-                al_draw_bitmap(chara.img_move[1], chara.x, chara.y, ALLEGRO_FLIP_HORIZONTAL);
-            }
-        }else{
-            if( chara.anime < chara.anime_time/2 ){
-                al_draw_bitmap(chara.img_move[0], chara.x, chara.y, 0);
-            }else{
-                al_draw_bitmap(chara.img_move[1], chara.x, chara.y, 0);
-            }
-        }
-    }else if( chara.state == ATK ){
-        if( chara.dir ){
-            if( chara.anime < chara.anime_time/2 ){
-                al_draw_bitmap(chara.img_atk[0], chara.x, chara.y, ALLEGRO_FLIP_HORIZONTAL);
-            }else{
-                al_draw_bitmap(chara.img_atk[1], chara.x, chara.y, ALLEGRO_FLIP_HORIZONTAL);
-                al_play_sample_instance(chara.atk_Sound);
-            }
-        }else{
-            if( chara.anime < chara.anime_time/2 ){
-                al_draw_bitmap(chara.img_atk[0], chara.x, chara.y, 0);
-            }else{
-                al_draw_bitmap(chara.img_atk[1], chara.x, chara.y, 0);
-                al_play_sample_instance(chara.atk_Sound);
-            }
-        }
-    }
+    float center_x=chara.width/2+chara.x;
+    float center_y=chara.height/2+chara.y;
+    stat_draw();
+    al_draw_scaled_rotated_bitmap(chara.img, chara.width/2, chara.height/2, chara.x, chara.y, 0.5, 0.5, chara.angle, 0);
 }
 void character_destory(){
-    al_destroy_bitmap(chara.img_atk[0]);
-    al_destroy_bitmap(chara.img_atk[1]);
-    al_destroy_bitmap(chara.img_move[0]);
-    al_destroy_bitmap(chara.img_move[1]);
-    al_destroy_sample_instance(chara.atk_Sound);
+    al_destroy_bitmap(chara.img);
+    stat_destroy();
+}
+void stat_init(){
+    stats=al_load_ttf_font("./font/OCR-A.ttf",34,0);
+}
+
+void stat_draw(){
+    char h_speed[15];
+    char v_speed[15];
+    char score[5];
+    float temp=(float)chara.v_velocity*-1.0;
+    int holder1 = snprintf(h_speed, sizeof h_speed, "%f", chara.h_velocity);
+    int holder2 = snprintf(v_speed, sizeof v_speed, "%f", temp);
+    al_draw_text(stats, al_map_rgb(255,255,255), 1900, 95, 0, h_speed);
+    al_draw_text(stats, al_map_rgb(255,255,255), 1900, 150, 0, v_speed);
+}
+void stat_destroy(){
+    al_destroy_font(stats);
 }
