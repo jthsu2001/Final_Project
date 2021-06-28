@@ -68,7 +68,7 @@ void game_begin() {
     al_restore_default_mixer();
     al_attach_sample_instance_to_mixer(sample_instance, al_get_default_mixer());
     // set the volume of instance
-    al_set_sample_instance_gain(sample_instance, 0.05) ;
+    al_set_sample_instance_gain(sample_instance, 0.0) ;
     al_play_sample_instance(sample_instance);
     al_start_timer(fps);
     // initialize the menu before entering the loop
@@ -86,12 +86,6 @@ void game_update(){
             window = 2;
         }
         else if(window == 2){
-            ALLEGRO_TIMER* Timer=al_create_timer(1);
-            al_start_timer(Timer);
-            character_draw();//draw the character (should be explosion)
-            while(1){//3 seconds latency
-                if(al_get_timer_count(Timer)>3) break;
-            }
             game_scene_destroy();
             end_scene_init();
             judge_next_window = false;
@@ -110,7 +104,7 @@ int process_event(){
     if( window == 1 ){
         menu_process(event);
     }else if( window == 2 ){
-        charater_process(event);
+        character_process(event);
     }
 
     // Shutdown our program

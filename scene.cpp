@@ -1,7 +1,7 @@
 #include "scene.h"
 
 ALLEGRO_FONT *font = NULL;
-ALLEGRO_BITMAP *background = NULL;
+
 
 // function of menu
 void menu_init(){
@@ -25,7 +25,10 @@ void menu_destroy(){
 void game_scene_init(){
     character_init();
     stat_init();
+    message_init();
     background = al_load_bitmap("./image/background.png");
+    ALLEGRO_LOCKED_REGION *lock;
+    lock = al_lock_bitmap(background, ALLEGRO_PIXEL_FORMAT_ANY, ALLEGRO_LOCK_READONLY);
 }
 void game_scene_draw(){
     al_draw_scaled_bitmap(background, 0, 0, 1104, 602, 0, 0, 2160, 1200, 0);
