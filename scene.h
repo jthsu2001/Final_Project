@@ -10,4 +10,6 @@ void game_scene_init();
 void game_scene_draw();
 void game_scene_destroy();
 
-
+void end_scene_init();
+void end_scene_draw();
+void end_scene_destroy();

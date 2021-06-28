@@ -36,3 +36,16 @@ void game_scene_destroy(){
     character_destory();
 }
 
+//function of end game sequence
+void end_scene_init(){
+    font=al_load_ttf_font("./font/OCR-A.ttf",34,0);
+}
+void end_scene_draw(){
+    al_clear_to_color(al_map_rgb(0,0,0));
+    al_draw_text(font, al_map_rgb(255,255,255), WIDTH/2, HEIGHT/2 , ALLEGRO_ALIGN_CENTRE, "Your Score:");
+};
+void end_scene_destroy(){
+    al_destroy_font(font);
+};
+
+

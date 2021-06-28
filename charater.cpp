@@ -1,7 +1,7 @@
 #include "charater.h"
 
 // the state of character
-enum {STOP = 0, MOVE, ATK};
+enum {MISSION = 0, EXPLODE};
 float gravity = 0.1;
 typedef struct character
 {
@@ -13,6 +13,7 @@ typedef struct character
     bool dir; // left: false, right: true
     int state; // the state of character
     ALLEGRO_BITMAP *img;
+    ALLEGRO_BITMAP *explode;
     int anime; // counting the time of animation
     int anime_time; // indicate how long the animation
 
@@ -25,8 +26,12 @@ ALLEGRO_FONT *stats = NULL;
 void character_init(){
     // load character images
     char temp[50];
-    sprintf( temp, "./image/rocket.png");
+    sprintf( temp, "./image/lander.png");
     chara.img = al_load_bitmap(temp);
+    // load explosion image
+    char explode[50];
+    sprintf( explode, "./image/explosion.png");
+    chara.explode=al_load_bitmap(explode);
     // initial the geometric information of character
     chara.width = al_get_bitmap_width(chara.img);
     chara.height = al_get_bitmap_height(chara.img);
@@ -36,9 +41,8 @@ void character_init(){
     chara.angle=0;
     chara.dir = false;
 
-
     // initial the animation component
-    chara.state = STOP;
+    chara.state = MISSION;
     chara.anime = 0;
     chara.anime_time = 30;
 
@@ -57,6 +61,10 @@ void charater_process(ALLEGRO_EVENT event){
     }else if( event.type == ALLEGRO_EVENT_KEY_UP ){
         key_state[event.keyboard.keycode] = false;
     }
+    else if(chara.x>WIDTH/2||chara.y>HEIGHT/2||chara.x*chara.y<0){//lander going out of bounds
+        chara.img=chara.explode;//change draw image to explode.png
+        judge_next_window = true;//initiate next window
+    }
 }
 void character_update(){
     // use the idea of finite state machine to deal with different state
@@ -69,18 +77,12 @@ void character_update(){
     else if( key_state[ALLEGRO_KEY_D] ){
         chara.angle+=0.1/3.14159;
     }
-    /*else if( chara.anime == chara.anime_time-1 ){
-        chara.anime = 0;
-        chara.state = STOP;
-    }*/
-    else if ( chara.anime == 0 ){
-        chara.state = STOP;
-    }
-    //y position updates according to y=0.5*a*t^2
+
+    //updates position as (x, y)==(x0, y0)+dt*(ax, ay)
     chara.v_velocity+=(float)gravity;
     chara.y += chara.v_velocity*(1/FPS)*2;
     chara.x += chara.h_velocity*(1/FPS)*2;
-    printf("%f\n", sinf(chara.angle));
+    //printf("%f\n", sinf(chara.angle));
     character_draw();
 }
 void character_draw(){
@@ -88,8 +90,8 @@ void character_draw(){
     float center_x=chara.width/2+chara.x;
     float center_y=chara.height/2+chara.y;
     stat_draw();
-    al_draw_scaled_rotated_bitmap(chara.img, chara.width/2, chara.height/2, chara.x, chara.y, 0.5, 0.5, chara.angle, 0);
-}
+    al_draw_scaled_rotated_bitmap(chara.img, chara.width/2, chara.height/2, chara.x, chara.y, 0.2, 0.2, chara.angle, 0);
+    }
 void character_destory(){
     al_destroy_bitmap(chara.img);
     stat_destroy();
@@ -97,7 +99,6 @@ void character_destory(){
 void stat_init(){
     stats=al_load_ttf_font("./font/OCR-A.ttf",34,0);
 }
-
 void stat_draw(){
     char h_speed[15];
     char v_speed[15];
