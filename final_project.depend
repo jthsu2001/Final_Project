@@ -1,8 +1,8 @@
 # depslib dependency file v1.0
-1624891144 source:c:\users\jui-teng hsu\desktop\i2p1_final_project\charater.cpp
+1624898205 source:c:\users\jui-teng hsu\desktop\i2p1_final_project\charater.cpp
 	"charater.h"
 
-1624893454 c:\users\jui-teng hsu\desktop\i2p1_final_project\charater.h
+1624894165 c:\users\jui-teng hsu\desktop\i2p1_final_project\charater.h
 	"global.h"
 	<math.h>
 	<time.h>
@@ -336,7 +336,7 @@
 1624797665 source:c:\users\jui-teng hsu\desktop\i2p1_final_project\main.cpp
 	"GameWindow.h"
 
-1624890202 source:c:\users\jui-teng hsu\desktop\i2p1_final_project\scene.cpp
+1624896848 source:c:\users\jui-teng hsu\desktop\i2p1_final_project\scene.cpp
 	"scene.h"
 
 1624797655 c:\users\jui-teng hsu\desktop\i2p1_final_project\scene.cpp
