@@ -19,3 +19,8 @@ void stat_destroy();
 void message_init();
 void message_draw();
 void message_destroy();
+
+
+void fuel_init();
+void fuel_draw();
+void fuel_destroy();

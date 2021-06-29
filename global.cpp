@@ -4,6 +4,7 @@
 const float FPS = 120.0;
 const int WIDTH = 2160;
 const int HEIGHT = 1200;
+extern int SCORE = 0;
 ALLEGRO_EVENT_QUEUE *event_queue = NULL;
 ALLEGRO_TIMER *fps = NULL;
 extern ALLEGRO_BITMAP *background=NULL;
