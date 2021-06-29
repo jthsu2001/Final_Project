@@ -36,7 +36,7 @@ void game_scene_draw(){
 }
 void game_scene_destroy(){
     al_destroy_bitmap(background);
-    character_destory();
+    character_destroy();
 }
 
 //function of end game sequence
